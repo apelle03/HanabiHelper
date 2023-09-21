@@ -295,6 +295,7 @@ function openFireworkSettings(fireworks, updateType) {
     numberChoice.onclick = numbers.includes(number)? () => setNumber(number) : null;
     if (numbers.length === 1 && number === numbers[0]) {
       numberChoice.classList.add("selected");
+      fireworkUpdate.number = number;
     }
   }
   
@@ -306,6 +307,7 @@ function openFireworkSettings(fireworks, updateType) {
     colorChoice.onclick = colors.includes(color)? () => setColor(color) : null;
     if (colors.length === 1 && color === colors[0]) {
       colorChoice.classList.add("selected");
+      fireworkUpdate.color = color;
     }
   }
 }
