@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>hanabi helper</title>
+  <link rel="stylesheet" type="text/css" href="./style.css">
+  <script src="./hh.js"></script>
+</head>
+<body>
+  <template id="player-template">
+    <div class="grid-container titled-grid">
+      <div class="title"></div>
+      <div class="grid-container cols hand"></div>
+    </div>
+  </template>
+  <template id="firework-template">
+    <div class="firework">
+      <div id="numbers" class="grid-container cols"></div>
+      <div id="label" class="marker">#</div>
+      <div id="colors" class="grid-container cols"></div>
+    </div>
+  </template>
+  <template id="marker-template">
+    <div class="marker"></div>
+  </template>
+  <template id="title-template">
+    <div class="title"></div>
+  </template>
+  <template id="color-chooser-template">
+    <div class="button color-choice"></div>
+  </template>
+
+  <div id="content" class="grid-container">
+    <div class="grid-container cols">
+      <div class="button" onClick="clickNewGame()">new game</div>
+      <div id="give-hint" class="button disabled">give hint</div>
+      <div id="play-discard" class="button disabled">play / discard</div>
+    </div>
+    <div id="players" class="grid-container"></div>
+    <div class="grid-container titled-grid">
+      <div class="title">played / discarded</div>
+      <div id="used" class="grid-container firework-grid"></div>
+    </div>
+  </div>
+
+  <div id="game-settings" class="popup">
+    <div class="title">player count</div>
+    <input type="radio" id="pc-2" name="pc">
+    <label for="pc2">2</label><br>
+    <input type="radio" id="pc-3" name="pc">
+    <label for="pc3">3</label><br>
+    <input type="radio" id="pc-4" name="pc">
+    <label for="pc4">4</label><br>
+    <input type="radio" id="pc-5" name="pc" checked>
+    <label for="pc5">5</label><br>
+    <div class="title">color rules</div>
+    <input type="radio" id="cr-standard" name="cr" checked>
+    <label for="cr-standard">standard</label><br>
+    <input type="radio" id="cr-rainbow" name="cr">
+    <label for="cr-rainbow">rainbow</label><br>
+    <div class="button" onClick="startGame()">start</div>
+  </div>
+
+  <div id="firework-settings" class="grid-container cols popup">
+    <div class="grid-container">
+      <div id="number-1" class="button number-choice">1</div>
+      <div id="number-2" class="button number-choice">2</div>
+      <div id="number-3" class="button number-choice">3</div>
+      <div id="number-4" class="button number-choice">4</div>
+      <div id="number-5" class="button number-choice">5</div>
+    </div>
+    <div id="colors" class="grid-container"></div>
+  </div>
+</body>
+</html>

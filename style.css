@@ -1,0 +1,145 @@
+html * {
+  font-family: sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #D5D5D5;
+  border-radius: 25px;
+  padding: 10px 25px;
+}
+
+.button.selected {
+  background: #B5B5B5;
+}
+
+.button.disabled {
+  color: red;
+}
+
+.title {
+  background: #D5D5D5;
+  border: 1px solid;
+  padding: 2px 10px;
+  text-align: center;
+}
+
+.marker {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+
+.grid-container {
+  display: grid;
+  gap: 10px;
+}
+
+#content {
+  height: 100vh;
+  grid-template-rows: auto 50fr 50fr;
+}
+
+.titled-grid{
+  grid-template-rows: auto 100fr;
+}
+
+.cols {
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+}
+
+.firework-grid {
+  grid-template-columns: auto auto auto auto auto;
+}
+
+.firework {
+  display: grid;
+  grid-template-rows: 20fr 60fr 20fr;
+  grid-auto-columns: minmax(0, 1fr);
+  background: #F5F5F5;
+  border: 1px solid;
+}
+
+.firework.selected {
+  background: #D5D5D5;
+}
+
+.popup {
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding: 20px;
+  background: #F5F5F5;
+}
+
+.popup.show {
+  visibility: visible;
+}
+
+.red {
+  background: linear-gradient(to right, red 0 50%, #F5F5F5 50% 100%);
+  background-size: 200% auto;
+  background-repeat: no-repeat;
+}
+
+.yellow {
+  background: linear-gradient(to right, yellow 0 50%, #F5F5F5 50% 100%);;
+  background-size: 200% auto;
+  background-repeat: no-repeat;
+}
+
+.green {
+  background: linear-gradient(to right, green 0 50%, #F5F5F5 50% 100%);;
+  background-size: 200% auto;
+  background-repeat: no-repeat;
+}
+
+.blue {
+  background: linear-gradient(to right, blue 0 50%, #F5F5F5 50% 100%);;
+  background-size: 200% auto;
+  background-repeat: no-repeat;
+}
+
+.white {
+  background: linear-gradient(to right, white 0 50%, #F5F5F5 50% 100%);;
+  background-size: 200% auto;
+  background-repeat: no-repeat;
+}
+
+.rainbow {
+  background: linear-gradient(to right, pink 0 50%, #F5F5F5 50% 100%);;
+  background-size: 200% auto;
+  background-repeat: no-repeat;
+}
+
+.none {
+  background-position: 100%;
+}
+
+.third {
+  background-position: 66%;
+}
+
+.half {
+  background-position: 50%;
+}
+
+.twothird {
+  background-position: 33%;
+}
+
+.all {
+  background-position: 0%;
+}
