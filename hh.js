@@ -37,7 +37,7 @@ class Firework {
     if (this.numbers.length > 1) {
       for (let number of this.numbers) {
         const marker = getTemplate("marker");
-        marker.textContent = number;
+        marker.querySelector("#text").textContent = number;
         numbersElem.appendChild(marker);
       }
     }

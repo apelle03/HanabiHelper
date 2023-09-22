@@ -10,10 +10,29 @@ body {
   background: black;
 }
 
-.button {
-  display: flex;
+.centered, .button, .title {
+  display: grid;
+  justify-items: center;
   align-items: center;
-  justify-content: center;
+}
+
+.scaled {
+  container: scaled / size;
+}
+
+@container scaled (min-width: 1px) {
+  span {
+    font-size: 90cqmin;
+  }
+}
+
+.title {
+  background: #666666;
+  border: 1px solid;
+  padding: 2px 10px;
+}
+
+.button {
   background: #444444;
   border-radius: 25px;
   padding: 10px 25px;
@@ -45,19 +64,6 @@ body {
   visibility: visible;
 }
 
-.title {
-  background: #666666;
-  border: 1px solid;
-  padding: 2px 10px;
-  text-align: center;
-}
-
-.marker {
-  display: grid;
-  justify-items: center;
-  align-items: center;
-}
-
 .grid-container {
   display: grid;
   gap: 10px;
@@ -84,8 +90,7 @@ body {
 
 .firework {
   display: grid;
-  grid-template-rows: auto auto auto;
-  grid-auto-columns: minmax(0, 1fr);
+  grid-template-rows: 20fr 60fr 20fr;
   background: #444444;
   border: 1px solid;
 }
