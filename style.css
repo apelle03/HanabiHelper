@@ -1,32 +1,52 @@
 html * {
   font-family: sans-serif;
   font-size: 40px;
+  color: #EEEEEE;
 }
 
 body {
   margin: 0;
   padding: 0;
+  background: black;
 }
 
 .button {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #D5D5D5;
+  background: #444444;
   border-radius: 25px;
   padding: 10px 25px;
+  border: 1px solid;
 }
 
 .button.selected {
-  background: #B5B5B5;
+  background: #666666;
 }
 
 .button.disabled {
   color: red;
+  background: #222222;
+}
+
+.popup {
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding: 20px;
+  background: black;
+}
+
+.popup.show {
+  visibility: visible;
 }
 
 .title {
-  background: #D5D5D5;
+  background: #666666;
   border: 1px solid;
   padding: 2px 10px;
   text-align: center;
@@ -44,8 +64,9 @@ body {
 }
 
 #content {
-  height: 100vh;
-  grid-template-rows: auto 50fr 50fr;
+  height: calc(100vh - 20px);
+  padding: 10px;
+  grid-template-rows: auto 60fr 40fr;
 }
 
 .titled-grid{
@@ -63,64 +84,48 @@ body {
 
 .firework {
   display: grid;
-  grid-template-rows: 20fr 60fr 20fr;
+  grid-template-rows: auto auto auto;
   grid-auto-columns: minmax(0, 1fr);
-  background: #F5F5F5;
+  background: #444444;
   border: 1px solid;
 }
 
 .firework.selected {
-  background: #D5D5D5;
-}
-
-.popup {
-  visibility: hidden;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
-  padding: 20px;
-  background: #F5F5F5;
-}
-
-.popup.show {
-  visibility: visible;
+  background: #666666;
 }
 
 .red {
-  background: linear-gradient(to right, red 0 50%, #F5F5F5 50% 100%);
+  background: linear-gradient(to right, red 0 50%, #444444 50% 100%);
   background-size: 200% auto;
   background-repeat: no-repeat;
 }
 
 .yellow {
-  background: linear-gradient(to right, yellow 0 50%, #F5F5F5 50% 100%);;
+  background: linear-gradient(to right, yellow 0 50%, #444444 50% 100%);;
   background-size: 200% auto;
   background-repeat: no-repeat;
 }
 
 .green {
-  background: linear-gradient(to right, green 0 50%, #F5F5F5 50% 100%);;
+  background: linear-gradient(to right, green 0 50%, #444444 50% 100%);;
   background-size: 200% auto;
   background-repeat: no-repeat;
 }
 
 .blue {
-  background: linear-gradient(to right, blue 0 50%, #F5F5F5 50% 100%);;
+  background: linear-gradient(to right, blue 0 50%, #444444 50% 100%);;
   background-size: 200% auto;
   background-repeat: no-repeat;
 }
 
 .white {
-  background: linear-gradient(to right, white 0 50%, #F5F5F5 50% 100%);;
+  background: linear-gradient(to right, white 0 50%, #444444 50% 100%);;
   background-size: 200% auto;
   background-repeat: no-repeat;
 }
 
 .rainbow {
-  background: linear-gradient(to right, pink 0 50%, #F5F5F5 50% 100%);;
+  background: linear-gradient(to right, pink 0 50%, #444444 50% 100%);;
   background-size: 200% auto;
   background-repeat: no-repeat;
 }
