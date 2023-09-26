@@ -154,6 +154,9 @@ class Player {
   }
 
   newTile() {
+    if (this.game.pool.length <= this.game.getUnspecifiedTiles().length) {
+      return;
+    }
     const tile = new Tile(this.game, this, this.tiles.length);
     this.tiles.push(tile);
     this.handElem.appendChild(tile.element);
@@ -173,6 +176,10 @@ class Player {
 
   getCurrent() {
     return this.tiles.filter(tile => !tile.isUsed);
+  }
+
+  getUnspecifiedTiles() {
+    return this.tiles.filter(tile => !tile.isSpecified());
   }
 }
 
@@ -201,6 +208,14 @@ class Game {
       this.players.push(player);
       playersElem.appendChild(player.element);
     }
+  }
+
+  getUnspecifiedTiles() {
+    const tiles = [];
+    for (let player of this.players) {
+      tiles.push(...player.getUnspecifiedTiles());
+    }
+    return tiles;
   }
 }
 
