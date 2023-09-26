@@ -84,18 +84,18 @@ body {
   grid-auto-flow: column;
 }
 
-.firework-grid {
+.tile-grid {
   grid-template-columns: auto auto auto auto auto;
 }
 
-.firework {
+.tile {
   display: grid;
   grid-template-rows: 20fr 60fr 20fr;
   background: #444444;
   border: 1px solid;
 }
 
-.firework.selected {
+.tile.selected {
   background: #666666;
 }
 

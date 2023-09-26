@@ -12,8 +12,8 @@
       <div class="grid-container cols hand"></div>
     </div>
   </template>
-  <template id="firework-template">
-    <div class="firework">
+  <template id="tile-template">
+    <div class="tile">
       <div id="numbers" class="grid-container cols"></div>
       <div class="scaled"><span id="label" class="centered">#</span></div>
       <div id="colors" class="grid-container cols"></div>
@@ -38,7 +38,7 @@
     <div id="players" class="grid-container"></div>
     <div class="grid-container titled-grid">
       <div class="title">played / discarded</div>
-      <div id="used" class="grid-container firework-grid"></div>
+      <div id="used" class="grid-container tile-grid"></div>
     </div>
   </div>
 
@@ -60,7 +60,7 @@
     <div class="button" onClick="startGame()">start</div>
   </div>
 
-  <div id="firework-settings" class="grid-container cols popup">
+  <div id="tile-settings" class="grid-container cols popup">
     <div class="grid-container">
       <div id="number-1" class="button number-choice">1</div>
       <div id="number-2" class="button number-choice">2</div>
