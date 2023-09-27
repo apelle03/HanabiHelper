@@ -135,22 +135,22 @@ body {
   background-repeat: no-repeat;
 }
 
-.none {
+.used-0 {
   background-position: 100%;
 }
 
-.third {
+.used-33 {
   background-position: 66%;
 }
 
-.half {
+.used-50 {
   background-position: 50%;
 }
 
-.twothird {
+.used-67 {
   background-position: 33%;
 }
 
-.all {
+.used-100 {
   background-position: 0%;
 }

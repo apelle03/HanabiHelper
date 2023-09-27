@@ -68,6 +68,7 @@ class Tile {
     this.element.style.display = "none";
     this.isUsed = true;
     this.player.newTile();
+    this.game.use(this.firework);
   }
 
   setNumber(number) {
@@ -243,8 +244,11 @@ class Game {
     /** @public {!Array<number} */ this.numbers = [1, 2, 3, 4, 5];
     /** @public {!Array<string>} */ this.colors = SETTINGS.colorRule[colorRule].colors;
     /** @public {!Array<!Firework>} */ this.pool = [];
+    /** @public {!Map<string, !Array<number>>} */ this.used = {};
     for (let color of this.colors) {
+      this.used[color] = [];
       for (let number of this.numbers) {
+        this.used[color][number] = 0;
         for (let i = 0; i < SETTINGS.fireworkCount[number]; i++) {
           this.pool.push(new Firework(number, color));
         }
@@ -266,10 +270,10 @@ class Game {
     for (const color of this.colors) {
       for (let tileNum = 1; tileNum <= 5; tileNum++) {
         const tileElem = getTemplate("tile");
-        tileElem.id = `${tileNum}-${color}`;
+        tileElem.id = `${color}-${tileNum}`;
         tileElem.querySelector("#label").textContent = tileNum;
         tileElem.classList.add(color);
-        tileElem.classList.add("none");
+        tileElem.classList.add("used-0");
         usedElem.appendChild(tileElem);
       }
     }
@@ -294,6 +298,14 @@ class Game {
       poolChanged = tile.update() || poolChanged;
     }
     return poolChanged;
+  }
+
+  use(firework) {
+    const percentUsed = ++this.used[firework.color][firework.num]
+        / SETTINGS.fireworkCount[firework.num];
+    const usedClass = `used-${(percentUsed * 100).toFixed()}`;
+    const usedElem = document.querySelector(`#used #${firework.color}-${firework.num}`);
+    usedElem.classList = `tile ${firework.color} ${usedClass}`;
   }
 }
 
