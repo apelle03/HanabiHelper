@@ -96,7 +96,7 @@ body {
 }
 
 .tile * {
-  text-shadow: 2px 2px black, -2px 2px black, 2px -2px black, -2px -2px black;
+  text-shadow: 0px 0px .1lh black;
 }
 
 .tile.selected {
