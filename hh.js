@@ -165,11 +165,13 @@ class Tile {
   }
 
   getPossibleNumbers() {
-    return [...new Set(this.filterPool(this.game.pool).map(firework => firework.num))];
+    const poolNumbers = this.filterPool(this.game.pool).map(firework => firework.num);
+    return this.game.numbers.filter(number => poolNumbers.includes(number));
   }
 
   getPossibleColors() {
-    return [...new Set(this.filterPool(this.game.pool).map(firework => firework.color))];
+    const poolColors = this.filterPool(this.game.pool).map(firework => firework.color);
+    return this.game.colors.filter(color => poolColors.includes(color));
   }
 
   static getCommonNumbers(tiles) {
