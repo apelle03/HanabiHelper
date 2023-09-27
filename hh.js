@@ -258,6 +258,28 @@ class Game {
       this.players.push(player);
       playersElem.appendChild(player.element);
     }
+
+    const usedElem = document.getElementById("used");
+    usedElem.replaceChildren();
+    for (const color of this.colors) {
+      for (let tileNum = 1; tileNum <= 5; tileNum++) {
+        const tileElem = getTemplate("tile");
+        tileElem.id = `${tileNum}-${color}`;
+        tileElem.querySelector("#label").textContent = tileNum;
+        tileElem.classList.add(color);
+        tileElem.classList.add("none");
+        usedElem.appendChild(tileElem);
+      }
+    }
+
+    const colorsElem = document.querySelector("#tile-settings #colors");
+    colorsElem.replaceChildren();
+    for (const color of this.colors) {
+      const colorElem = getTemplate("color-chooser");
+      colorElem.id = "color-" + color;
+      colorElem.textContent = color;
+      colorsElem.appendChild(colorElem);
+    }
   }
 
   getUnspecifiedTiles() {
@@ -309,35 +331,6 @@ function startGame() {
   const playerCount = getElementNumber(document.querySelector("input[name='pc']:checked"));
   const colorRule = getElementQualifier(document.querySelector("input[name='cr']:checked"));
   game = new Game(playerCount, colorRule);
-  populateUsed(game.colors);
-  populateSettings(game.colors);
-}
-
-/** @param {!Set<!Color>} colors */
-function populateUsed(colors) {
-  const usedElem = document.getElementById("used");
-  usedElem.replaceChildren();
-  for (const color of colors) {
-    for (let tileNum = 1; tileNum <= 5; tileNum++) {
-      const tileElem = getTemplate("tile");
-      tileElem.querySelector("#label").textContent = tileNum;
-      tileElem.classList.add(color);
-      tileElem.classList.add("none");
-      usedElem.appendChild(tileElem);
-    }
-  }
-}
-
-/** @param {!Set<!Color>} colors */
-function populateSettings(colors) {
-  const colorsElem = document.querySelector("#tile-settings #colors");
-  colorsElem.replaceChildren();
-  for (const color of colors) {
-    const colorElem = getTemplate("color-chooser");
-    colorElem.id = "color-" + color;
-    colorElem.textContent = color;
-    colorsElem.appendChild(colorElem);
-  }
 }
 
 function clickHint() {
