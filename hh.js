@@ -393,18 +393,21 @@ function updateTileChoices() {
 
   for (let numberChoice of document.querySelectorAll(".number-choice")) {
     const number = getElementNumber(numberChoice);
+    const isSelected = tileUpdate.type !== "hint" && numbers.length === 1 && numbers.includes(number);
     numberChoice.classList.toggle("disabled", !numbers.includes(number));
-    numberChoice.classList.toggle("selected",
-        tileUpdate.type !== "hint" && numbers.length === 1 && numbers.includes(number));
-    numberChoice.onclick = numbers.includes(number)? () => setNumber(number) : null;
+    numberChoice.classList.toggle("selected", isSelected);
+    numberChoice.onclick = numbers.includes(number) && !isSelected
+        ? () => setNumber(number) : null;
   }
 
   for (let colorChoice of document.querySelectorAll(".color-choice")) {
     const color = getElementQualifier(colorChoice);
+    const isSelected = tileUpdate.type !== "hint" && colors.length === 1 && colors.includes(color);
     colorChoice.classList.toggle("disabled", !colors.includes(color));
     colorChoice.classList.toggle("selected",
         tileUpdate.type !== "hint" && colors.length === 1 && colors.includes(color));
-    colorChoice.onclick = colors.includes(color)? () => setColor(color) : null;
+    colorChoice.onclick = colors.includes(color) && !isSelected
+        ? () => setColor(color) : null;
   }
 }
 
