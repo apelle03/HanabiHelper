@@ -30,10 +30,11 @@
   </template>
 
   <div id="content" class="grid-container">
-    <div class="grid-container cols">
+    <div class="grid-container cols fit-cols">
       <div class="button" onClick="clickNewGame()">new game</div>
       <div id="give-hint" class="button disabled">give hint</div>
       <div id="play-discard" class="button disabled">play / discard</div>
+      <div id="undo" class="button" onClick="clickUndo()">&#x238C;</div>
     </div>
     <div id="players" class="grid-container"></div>
     <div class="grid-container titled-grid">

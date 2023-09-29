@@ -205,6 +205,7 @@ class Player {
     this.tiles.push(tile);
     this.game.tiles.push(tile);
     this.handElem.appendChild(tile.element);
+    return tile;
   }
 
   getSelected() {
@@ -225,6 +226,17 @@ class Player {
 
   getUnspecifiedTiles() {
     return this.tiles.filter(tile => !tile.isSpecified());
+  }
+
+  restore(player) {
+    this.tiles = [];
+    this.handElem.replaceChildren();
+    for (let tile of player.tiles) {
+      const newTile = this.newTile();
+      newTile.numbers = tile.numbers;
+      newTile.colors = tile.colors;
+      newTile.update();
+    }
   }
 }
 
@@ -279,6 +291,8 @@ class Game {
       colorElem.textContent = color;
       colorsElem.appendChild(colorElem);
     }
+    /** @private {!Array<Object>} */ this.undoStack = [];
+    this.snapshot();
   }
 
   getUnspecifiedTiles() {
@@ -299,6 +313,36 @@ class Game {
     const usedClass = `used-${(percentUsed * 100).toFixed()}`;
     const usedElem = document.querySelector(`#used #${firework.color}-${firework.num}`);
     usedElem.classList = `tile ${firework.color} ${usedClass}`;
+  }
+
+  undo() {
+    if (this.undoStack.length < 2) {
+      return;
+    }
+    // Throw out current state.
+    this.undoStack.pop();
+    // Load previous state and keep it on the stack.
+    const state = this.undoStack[this.undoStack.length - 1];
+    this.tiles = [];
+    this.pool = state.pool;
+    this.used = state.used;
+    for (let playerNum = 0; playerNum < this.playerCount; playerNum++) {
+      this.players[playerNum].restore(state.players[playerNum]);
+    }
+  }
+
+  snapshot() {
+    const state = {
+      pool: [...this.pool],
+      used: JSON.parse(JSON.stringify(this.used)),
+      players: this.players.map(player => ({
+          tiles: player.tiles.map(tile => ({
+              numbers: [...tile.numbers],
+              colors: [...tile.colors],
+          }))
+      })),
+    };
+    this.undoStack.push(state);
   }
 }
 
@@ -353,6 +397,12 @@ function clickUse() {
     tile.use();
   } else {
     openTileSettings("use", [tile]);
+  }
+}
+
+function clickUndo() {
+  if (game) {
+    game.undo();
   }
 }
 
@@ -478,4 +528,5 @@ function finishTileUpdate(poolChanged) {
   while (poolChanged) {
     poolChanged = game.updateUnspecifiedTiles();
   }
+  game.snapshot();
 }

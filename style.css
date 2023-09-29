@@ -89,6 +89,10 @@ body {
   grid-auto-flow: column;
 }
 
+.fit-cols {
+  grid-auto-columns: auto
+}
+
 .tile-grid {
   grid-template-columns: auto auto auto auto auto;
 }
