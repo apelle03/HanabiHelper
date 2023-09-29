@@ -182,9 +182,10 @@ class Tile {
 }
 
 class Player {
-  constructor(game, playerNum) {
+  constructor(game, playerNum, insertOnRight) {
     /** @public {!Game} */ this.game = game;
     /** @public {number} */ this.num = playerNum;
+    /** @public {boolean} */ this.insertOnRight = insertOnRight;
     /** @public {!Array<!Tile>} */ this.tiles = [];
 
     /** @public {!Element} */ this.element = getTemplate("player");
@@ -204,7 +205,12 @@ class Player {
     const tile = new Tile(this.game, this, this.tiles.length);
     this.tiles.push(tile);
     this.game.tiles.push(tile);
-    this.handElem.appendChild(tile.element);
+    // Flip insertion side for other players to account for physical rotation.
+    if ((this.num === 0) == this.insertOnRight) {
+      this.handElem.appendChild(tile.element);
+    } else {
+      this.handElem.insertBefore(tile.element, this.handElem.firstChild);
+    }
     return tile;
   }
 
@@ -241,9 +247,10 @@ class Player {
 }
 
 class Game {
-  constructor(playerCount, colorRule) {
+  constructor(playerCount, colorRule, discardSide) {
     /** @public {number} */ this.playerCount = playerCount;
     /** @public {string} */ this.colorRule = colorRule;
+    /** @public {string} */ this.insertOnRight = discardSide === "left";
 
     /** @public {number} */ this.handSize = SETTINGS.playerCount[playerCount].handSize;
     /** @public {!Array<number} */ this.numbers = [1, 2, 3, 4, 5];
@@ -265,7 +272,7 @@ class Game {
     const playersElem = document.getElementById("players");
     playersElem.replaceChildren();
     for (let playerNum = 0; playerNum < playerCount; playerNum++) {
-      const player = new Player(this, playerNum)
+      const player = new Player(this, playerNum, this.insertOnRight);
       this.players.push(player);
       playersElem.appendChild(player.element);
     }
@@ -381,7 +388,8 @@ function startGame() {
   document.getElementById("game-settings").classList.remove("show");
   const playerCount = getElementNumber(document.querySelector("input[name='pc']:checked"));
   const colorRule = getElementQualifier(document.querySelector("input[name='cr']:checked"));
-  game = new Game(playerCount, colorRule);
+  const discardSide = getElementQualifier(document.querySelector("input[name='ds']:checked"));
+  game = new Game(playerCount, colorRule, discardSide);
 }
 
 function clickHint() {
