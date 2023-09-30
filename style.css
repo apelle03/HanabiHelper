@@ -69,7 +69,7 @@ body {
   visibility: visible;
 }
 
-.grid-container,.form-control {
+.grid-container, .form-control {
   display: grid;
   gap: 10px;
 }
@@ -78,6 +78,10 @@ body {
   height: calc(100vh - 20px);
   padding: 10px;
   grid-template-rows: auto 60fr 40fr;
+}
+
+#tile-settings {
+  grid-template-rows: auto 100fr;
 }
 
 .titled-grid{

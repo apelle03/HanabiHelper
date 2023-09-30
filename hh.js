@@ -491,6 +491,11 @@ function openTileSettings(updateType, tiles, nonHintTiles) {
   updateTileChoices();
 }
 
+function cancelTileSettings() {
+  document.getElementById("tile-settings").classList.remove("show");
+  tileUUpdate = null;
+}
+
 function setNumber(number) {
   let poolChanged = false;
   for (let tile of tileUpdate.tiles) {
