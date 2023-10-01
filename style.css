@@ -171,3 +171,7 @@ body {
 .used-100 {
   background-position: 0%;
 }
+
+.hidden {
+  display: none;
+}

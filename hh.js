@@ -26,21 +26,97 @@ class Firework {
 }
 
 class Tile {
-  constructor(game, player, tileNum) {
-    /** @public {!Game} */ this.game = game;
-    /** @public {!Player} */ this.player = player;
-    /** @public {number} */ this.num = tileNum;
+  constructor(game, player, showMarkers) {
+    /** @private @const {!Game} */ this.game = game;
+    /** @private @const {!Player} */ this.player = player;
+    /** @private @const {boolean} */ this.showMarkers = showMarkers;
 
-    /** @public {!Array<number>} */ this.numbers = [...this.game.numbers];
-    /** @public {!Array<string>} */ this.colors = [...this.game.colors];
-    /** @public {boolean */ this.isUsed = false;
-    /** @public {boolean */ this.isSelected = false;
+    /** @public @readonly {!Array<number>} */ this.numbers = [...game.numbers];
+    /** @public @readonly {!Array<string>} */ this.colors = [...game.colors];
+    /** @public @readonly {boolean */ this.isUsed = false;
+    /** @public @readonly {boolean */ this.isSelected = false;
+    /** @public @const {!Element} */ this.element = getTemplate("tile");
+
     /** @private {?Firework} */ this.firework = null;
+    this.updateUi();
+  }
 
-    /** @public {!Element} */ this.element = getTemplate("tile");
-    this.element.id = "tile-" + tileNum;
-    this.element.onclick = () => clickTile(this.player.num, this.num);
-    this.update();
+  update() {
+    this.numbers = this.getPossibleNumbers();
+    this.colors = this.getPossibleColors();
+    const poolChanged = this.maybeTakeFirework();
+    this.updateUi();
+    return poolChanged;
+  }
+
+  /** @private */
+  getPossibleNumbers() {
+    const poolNumbers = this.filterPool(this.game.pool).map(firework => firework.num);
+    return this.game.numbers.filter(number => poolNumbers.includes(number));
+  }
+
+  /** @private */
+  getPossibleColors() {
+    const poolColors = this.filterPool(this.game.pool).map(firework => firework.color);
+    return this.game.colors.filter(color => poolColors.includes(color));
+  }
+
+  /** @private */
+  filterPool(pool) {
+    return pool.filter(firework => this.numbers.includes(firework.num) && this.colors.includes(firework.color));
+  }
+
+  /** @private */
+  maybeTakeFirework() {
+    if (this.isSpecified() && this.firework === null) {
+      for (let firework of this.game.pool) {
+        if (firework.num === this.numbers[0] && firework.color === this.colors[0]) {
+          this.firework = this.game.pool.splice(this.game.pool.indexOf(firework), 1)[0];
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  updateUi() {
+    this.element.querySelector("#label").textContent =
+        this.numbers.length === 1 ? this.numbers[0] : "#";
+    this.element.classList = "tile";
+    if (this.colors.length === 1) {
+      this.element.classList.add(this.colors[0]);
+    }
+    this.element.classList.toggle("hidden", /* force= */ this.isUsed);
+    this.element.classList.toggle("selected", /* force= */ this.isSelected);
+    this.updateMarkers();
+  }
+
+  /** @private */
+  updateMarkers() {
+    const numbersElem = this.element.querySelector("#numbers");
+    const colorsElem = this.element.querySelector("#colors");
+
+    numbersElem.replaceChildren();
+    colorsElem.replaceChildren();
+    if (!this.showMarkers) {
+      return;
+    }
+
+    if (this.numbers.length > 1) {
+      for (let number of this.numbers) {
+        const marker = getTemplate("marker");
+        marker.querySelector("#text").textContent = number;
+        numbersElem.appendChild(marker);
+      }
+    }
+
+    if (this.colors.length > 1) {
+      for (let color of this.colors) {
+        const marker = getTemplate("marker");
+        marker.classList.add(color);
+        colorsElem.appendChild(marker);
+      }
+    }
   }
 
   isSpecified() {
@@ -49,19 +125,12 @@ class Tile {
 
   setSelected(isSelected) {
     this.isSelected = isSelected;
-    this.element.classList.toggle("selected", /* force= */ isSelected);
+    this.updateUi();
     updateHintUseButtons();
   }
 
   toggleSelected() {
     this.setSelected(!this.isSelected);
-  }
-
-  use() {
-    this.element.style.display = "none";
-    this.isUsed = true;
-    this.player.newTile();
-    this.game.use(this.firework);
   }
 
   setNumber(number) {
@@ -96,103 +165,25 @@ class Tile {
     return false;
   }
 
-  update() {
-    this.updatePossibilities();
-    if (this.player.num === 0) {
-      this.updateMarkers();
-    }
-    if (this.numbers.length === 1) {
-      this.element.querySelector("#label").textContent = this.numbers[0];
-    }
-    if (this.colors.length === 1) {
-      this.element.classList = "tile";
-      this.element.classList.add(this.colors[0]);
-    }
-    return this.maybeTakeFirework();
-  }
-
-  /** @private */
-  updatePossibilities() {
-    this.numbers = this.getPossibleNumbers();
-    this.colors = this.getPossibleColors();
-  }
-
-  /** @private */
-  updateMarkers() {
-    const numbersElem = this.element.querySelector("#numbers");
-    numbersElem.replaceChildren();
-    if (this.numbers.length > 1) {
-      for (let number of this.numbers) {
-        const marker = getTemplate("marker");
-        marker.querySelector("#text").textContent = number;
-        numbersElem.appendChild(marker);
-      }
-    }
-
-    const colorsElem = this.element.querySelector("#colors");
-    colorsElem.replaceChildren();
-    if (this.colors.length > 1) {
-      for (let color of this.colors) {
-        const marker = getTemplate("marker");
-        marker.classList.add(color);
-        colorsElem.appendChild(marker);
-      }
-    }
-  }
-
-  /** @private */
-  maybeTakeFirework() {
-    if (this.isSpecified() && this.firework === null) {
-      for (let firework of this.game.pool) {
-        if (firework.num === this.numbers[0] && firework.color === this.colors[0]) {
-          this.firework = this.game.pool.splice(this.game.pool.indexOf(firework), 1)[0];
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  /** @private */
-  filterPool(pool) {
-    return pool.filter(firework => this.numbers.includes(firework.num) && this.colors.includes(firework.color));
-  }
-
-  getPossibleNumbers() {
-    const poolNumbers = this.filterPool(this.game.pool).map(firework => firework.num);
-    return this.game.numbers.filter(number => poolNumbers.includes(number));
-  }
-
-  getPossibleColors() {
-    const poolColors = this.filterPool(this.game.pool).map(firework => firework.color);
-    return this.game.colors.filter(color => poolColors.includes(color));
-  }
-
-  static getCommonNumbers(tiles) {
-    return tiles.reduce(
-      (numbers, tile) => numbers.filter(number => tile.numbers.includes(number)),
-      tiles[0].numbers);
-  }
-
-  static getCommonColors(tiles) {
-    return tiles.reduce(
-        (colors, tile) => colors.filter(color => tile.colors.includes(color)),
-        tiles[0].colors);
+  use() {
+    this.isUsed = true;
+    this.updateUi();
+    this.player.newTile();
+    this.game.use(this.firework);
   }
 }
 
 class Player {
   constructor(game, playerNum, insertOnRight) {
-    /** @public {!Game} */ this.game = game;
-    /** @public {number} */ this.num = playerNum;
-    /** @public {boolean} */ this.insertOnRight = insertOnRight;
-    /** @public {!Array<!Tile>} */ this.tiles = [];
+    /** @private @const {!Game} */ this.game = game;
+    /** @private @const {number} */ this.num = playerNum;
+    /** @private @const {boolean} */ this.insertOnRight = insertOnRight;
+    /** @public @readonly {!Array<!Tile>} */ this.tiles = [];
 
-    /** @public {!Element} */ this.element = getTemplate("player");
-    this.element.id = "player-" + playerNum;
+    /** @private @const {!Element} */ this.element = getTemplate("player");
     this.element.querySelector(".title").textContent = playerNum === 0 ? "you" : "player " + playerNum;
 
-    /** @private {!Element} */ this.handElem = this.element.querySelector(".hand");
+    /** @private @const {!Element} */ this.handElem = this.element.querySelector(".hand");
     for (let tileNum = 0; tileNum < this.game.handSize; tileNum++) {
       this.newTile();
     }
@@ -202,9 +193,12 @@ class Player {
     if (this.game.pool.length <= this.game.getUnspecifiedTiles().length) {
       return;
     }
-    const tile = new Tile(this.game, this, this.tiles.length);
+    const tile = new Tile(this.game, this, this.num === 0);
+    const tileNum = this.tiles.length;
+    tile.element.onclick = () => clickTile(this.num, tileNum);
     this.tiles.push(tile);
     this.game.tiles.push(tile);
+
     // Flip insertion side for other players to account for physical rotation.
     if ((this.num === 0) == this.insertOnRight) {
       this.handElem.appendChild(tile.element);
@@ -239,9 +233,11 @@ class Player {
     this.handElem.replaceChildren();
     for (let tile of player.tiles) {
       const newTile = this.newTile();
-      newTile.numbers = tile.numbers;
-      newTile.colors = tile.colors;
-      newTile.update();
+      newTile.numbers = [...tile.numbers];
+      newTile.colors = [...tile.colors];
+      newTile.isUsed = tile.isUsed;
+      newTile.firework = tile.firework;
+      newTile.updateUi();
     }
   }
 }
@@ -315,11 +311,23 @@ class Game {
   }
 
   use(firework) {
-    const percentUsed = ++this.used[firework.color][firework.num]
-        / SETTINGS.fireworkCount[firework.num];
+    this.used[firework.color][firework.num]++
+    this.updateUsedMarker(firework.color, firework.num);
+  }
+
+  updateUsedMarker(color, number) {
+    const percentUsed = this.used[color][number] / SETTINGS.fireworkCount[number];
     const usedClass = `used-${(percentUsed * 100).toFixed()}`;
-    const usedElem = document.querySelector(`#used #${firework.color}-${firework.num}`);
-    usedElem.classList = `tile ${firework.color} ${usedClass}`;
+    const usedElem = document.querySelector(`#used #${color}-${number}`);
+    usedElem.classList = `tile ${color} ${usedClass}`;
+  }
+
+  updateUsedMarkers() {
+    for (let color of this.colors) {
+      for (let number of this.numbers) {
+        this.updateUsedMarker(color, number);
+      }
+    }
   }
 
   undo() {
@@ -331,8 +339,9 @@ class Game {
     // Load previous state and keep it on the stack.
     const state = this.undoStack[this.undoStack.length - 1];
     this.tiles = [];
-    this.pool = state.pool;
-    this.used = state.used;
+    this.pool = [...state.pool];
+    this.used = JSON.parse(JSON.stringify(state.used));
+    this.updateUsedMarkers();
     for (let playerNum = 0; playerNum < this.playerCount; playerNum++) {
       this.players[playerNum].restore(state.players[playerNum]);
     }
@@ -346,6 +355,8 @@ class Game {
           tiles: player.tiles.map(tile => ({
               numbers: [...tile.numbers],
               colors: [...tile.colors],
+              isUsed: tile.isUsed,
+              firework: tile.firework,
           }))
       })),
     };
@@ -401,11 +412,7 @@ function clickHint() {
 function clickUse() {
   const tile = game.players[0].getSelected()[0]
   tile.setSelected(false);
-  if (tile.isSpecified()) {
-    tile.use();
-  } else {
-    openTileSettings("use", [tile]);
-  }
+  openTileSettings("use", [tile]);
 }
 
 function clickUndo() {
@@ -443,19 +450,17 @@ function clickTile(playerNum, tileNum) {
   const tile = game.players[playerNum].tiles[tileNum];
   if (playerNum === 0) {
     tile.toggleSelected();
-  } else if (tile.isSpecified()) {
-    tile.use();
-  } else {
-    openTileSettings("full", [tile]);
+  } else  {
+    openTileSettings(tile.isSpecified() ? "use" : "full", [tile]);
   }
 }
 
 let tileUpdate = null;
 
 function updateTileChoices() {
-  const numbers = Tile.getCommonNumbers(tileUpdate.tiles);
-  const colors = Tile.getCommonColors(tileUpdate.tiles);
-
+  const numbers = tileUpdate.tiles.reduce(
+      (numbers, tile) => numbers.filter(number => tile.numbers.includes(number)),
+      tileUpdate.tiles[0].numbers);
   for (let numberChoice of document.querySelectorAll(".number-choice")) {
     const number = getElementNumber(numberChoice);
     const isSelected = tileUpdate.type !== "hint" && numbers.length === 1 && numbers.includes(number);
@@ -465,6 +470,9 @@ function updateTileChoices() {
         ? () => setNumber(number) : null;
   }
 
+  const colors = tileUpdate.tiles.reduce(
+        (colors, tile) => colors.filter(color => tile.colors.includes(color)),
+        tileUpdate.tiles[0].colors);
   for (let colorChoice of document.querySelectorAll(".color-choice")) {
     const color = getElementQualifier(colorChoice);
     const isSelected = tileUpdate.type !== "hint" && colors.length === 1 && colors.includes(color);
@@ -488,7 +496,11 @@ function openTileSettings(updateType, tiles, nonHintTiles) {
       nonHintTiles: nonHintTiles,
   };
   document.getElementById("tile-settings").classList.add("show");
-  updateTileChoices();
+  if (updateType === "use") {
+    maybeFinishTileUpdate(/* poolChanged= */ false);
+  } else {
+    updateTileChoices();
+  }
 }
 
 function cancelTileSettings() {
