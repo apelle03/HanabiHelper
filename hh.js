@@ -338,6 +338,10 @@ class Game {
     this.undoStack.pop();
     // Load previous state and keep it on the stack.
     const state = this.undoStack[this.undoStack.length - 1];
+    this.restore(state);
+  }
+
+  restore(state) {
     this.tiles = [];
     this.pool = [...state.pool];
     this.used = JSON.parse(JSON.stringify(state.used));
@@ -506,6 +510,7 @@ function openTileSettings(updateType, tiles, nonHintTiles) {
 function cancelTileSettings() {
   document.getElementById("tile-settings").classList.remove("show");
   tileUUpdate = null;
+  game.restore(game.undoStack[game.undoStack.length - 1]);
 }
 
 function setNumber(number) {
