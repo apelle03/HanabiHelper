@@ -177,16 +177,28 @@ class Player {
   constructor(game, playerNum, insertOnRight) {
     /** @private @const {!Game} */ this.game = game;
     /** @private @const {number} */ this.num = playerNum;
-    /** @private @const {boolean} */ this.insertOnRight = insertOnRight;
+    /** @private {string} */ this.name =  playerNum === 0 ? "you" : "player " + playerNum;
+    /** @private {boolean} */ this.insertOnRight = insertOnRight;
     /** @public @readonly {!Array<!Tile>} */ this.tiles = [];
 
     /** @private @const {!Element} */ this.element = getTemplate("player");
-    this.element.querySelector(".title").textContent = playerNum === 0 ? "you" : "player " + playerNum;
+    /** @private @const {!Element} */ this.titleElement = this.element.querySelector(".title");
+    this.titleElement.textContent = this.name;
+    this.titleElement.onclick = () => openPlayerSettings(this);
 
     /** @private @const {!Element} */ this.handElem = this.element.querySelector(".hand");
     for (let tileNum = 0; tileNum < this.game.handSize; tileNum++) {
       this.newTile();
     }
+  }
+
+  setName(name) {
+    this.name = name;
+    this.titleElement.textContent = this.name;
+  }
+
+  setInsertOnRight(insertOnRight) {
+    this.insertOnRight = insertOnRight;
   }
 
   newTile() {
@@ -405,6 +417,30 @@ function startGame() {
   const colorRule = getElementQualifier(document.querySelector("input[name='cr']:checked"));
   const discardSide = getElementQualifier(document.querySelector("input[name='ds']:checked"));
   game = new Game(playerCount, colorRule, discardSide);
+}
+
+let playerUpdate = null;
+
+function openPlayerSettings(player) {
+  const settingsElem = document.getElementById("player-settings");
+  settingsElem.classList.add("show");
+  settingsElem.querySelector("#player-name").value = player.name;
+  const selection = player.insertOnRight ? settingsElem.querySelector("#pds-left") : settingsElem.querySelector("#pds-right");
+  selection.checked = true;
+  playerUpdate = {
+    player: player,
+  };
+}
+
+function savePlayerSettings() {
+  playerUpdate.player.setName(document.querySelector("input[name='player-name']").value);
+  playerUpdate.player.setInsertOnRight(getElementQualifier(document.querySelector("input[name='pds']:checked")) === "left");
+  closePlayerSettings();
+}
+
+function closePlayerSettings() {
+  document.getElementById("player-settings").classList.remove("show");
+  playerUpdate = null;
 }
 
 function clickHint() {

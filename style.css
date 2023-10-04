@@ -26,6 +26,13 @@ body {
   }
 }
 
+#player-name {
+  width: 97%;
+  margin: 10px;
+  font-size: 60px;
+  color: black;
+}
+
 .title {
   background: #666666;
   border: 1px solid;

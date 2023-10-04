@@ -82,6 +82,24 @@
     <div class="button" onClick="startGame()">start</div>
   </div>
 
+  <div id="player-settings" class="popup">
+    <div class="title">player name</div>
+    <input type="text" id="player-name" name="player-name">
+    <div class="title">discard side</div>
+    <label class="form-control">
+      <input type="radio" id="pds-left" name="pds">
+      left
+    </label>
+    <label class="form-control">
+      <input type="radio" id="pds-right" name="pds" checked>
+      right
+    </label>
+    <div class="grid-container cols">
+      <div class="button" onClick="savePlayerSettings()">ok</div>
+      <div class="button" onClick="closePlayerSettings()">cancel</div>
+    </div>
+  </div>
+
   <div id="tile-settings" class="grid-container popup">
     <div class="button" onClick="cancelTileSettings()">cancel</div>
     <div class="grid-container cols">
