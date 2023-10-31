@@ -111,7 +111,7 @@ body {
 .tile {
   display: grid;
   grid-template-rows: 20fr 60fr 20fr;
-  background: #444444;
+  background-color: #444444;
   border: 1px solid;
 }
 
@@ -120,63 +120,63 @@ body {
 }
 
 .tile.selected {
-  background: #666666;
+  background-color: #666666;
 }
 
 .red {
-  background: linear-gradient(to right, red 0 50%, #444444 50% 100%);
+  background-image: linear-gradient(to right, red 0 50%);
   background-size: 200% auto;
   background-repeat: no-repeat;
 }
 
 .yellow {
-  background: linear-gradient(to right, yellow 0 50%, #444444 50% 100%);;
+  background-image: linear-gradient(to right, yellow 0 50%);
   background-size: 200% auto;
   background-repeat: no-repeat;
 }
 
 .green {
-  background: linear-gradient(to right, green 0 50%, #444444 50% 100%);;
+  background-image: linear-gradient(to right, green 0 50%);
   background-size: 200% auto;
   background-repeat: no-repeat;
 }
 
 .blue {
-  background: linear-gradient(to right, blue 0 50%, #444444 50% 100%);;
+  background-image: linear-gradient(to right, blue 0 50%);
   background-size: 200% auto;
   background-repeat: no-repeat;
 }
 
 .white {
-  background: linear-gradient(to right, white 0 50%, #444444 50% 100%);;
+  background-image: linear-gradient(to right, white 0 50%);
   background-size: 200% auto;
   background-repeat: no-repeat;
 }
 
 .rainbow {
-  background: linear-gradient(to right, pink 0 50%, #444444 50% 100%);;
+  background-image: linear-gradient(to bottom, red 0 20%, yellow 20% 40%, green 40% 60%, blue 60% 80%, white 80% 100%);
   background-size: 200% auto;
   background-repeat: no-repeat;
 }
 
 .used-0 {
-  background-position: 100%;
+  background-position: 200%;
 }
 
 .used-33 {
-  background-position: 66%;
+  background-position: 166%;
 }
 
 .used-50 {
-  background-position: 50%;
+  background-position: 150%;
 }
 
 .used-67 {
-  background-position: 33%;
+  background-position: 133%;
 }
 
 .used-100 {
-  background-position: 0%;
+  background-position: 100%;
 }
 
 .hidden {
